@@ -3,7 +3,8 @@ import { View, Text, Image, StyleSheet, TextInput, Button, TouchableOpacity, Fla
 import axios from 'axios';
 import { createStackNavigator } from '@react-navigation/stack'; // Import stack navigator
 import Colors from '../assets/Colors';
-import ProductDetail from './ProductDetail'; // Import the product detail screen
+import ProductDetail from './ProductDetail'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator(); // Create a stack navigator
 
@@ -42,6 +43,7 @@ function ProductBrowsingScreen({ navigation }) {
     try {
       const response = await axios.get('https://fakestoreapi.com/products');
       setProducts(response.data);
+      await AsyncStorage.setItem("products", JSON.stringify(response.data)); // Store fetched products in AsyncStorage
     } catch (error) {
       console.error('Error fetching products:', error);
     }
@@ -56,14 +58,14 @@ function ProductBrowsingScreen({ navigation }) {
     }
   };
 
-  const navigateToProductDetail = (productId) => {
-    navigation.navigate('ProductDetail', { productId });
+  const navigateToProductDetail = (product) => {
+    navigation.navigate('ProductDetail', { product });
   };
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.productContainer}
-      onPress={() => navigateToProductDetail(item.id)}
+      onPress={() => navigateToProductDetail(item)}
     >
       <Image source={{ uri: item.image }} style={styles.image} />
       <Text>{item.title}</Text>
