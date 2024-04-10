@@ -24,6 +24,7 @@ const CartScreen = () => {
     }
   };
 
+  console.log("cartItems : ", cartItems)
   const updateCartItems = async updatedCartItems => {
     try {
       await AsyncStorage.setItem('cartItems', JSON.stringify(updatedCartItems));

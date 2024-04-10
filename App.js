@@ -1,127 +1,46 @@
-import * as React from 'react';
-import { StyleSheet, Image } from 'react-native';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import ProductBrowsingScreen from './src/screen/ProductBrowsingScreen';
-import CartScreen from './src/screen/CartScreen';
-import UserProfile from './src/screen/UserProfile';
-import ProductDetail from './src/screen/ProductDetail'; // Example additional screen
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Footer from './src/component/Footer';
+import Home from './src/screen/home/Home'
+import MainMaster from './src/screen/master/MainMaster';
+import SplashScreen from './src/component/SplashScreen';
+import MainLogin from './src/screen/auth/MainLogin';
+import Login from './src/screen/auth/Login';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-function HomeStack() {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <Stack.Screen name="HomeStack" component={ProductBrowsingScreen} />
-      <Stack.Screen name="ProductDetail" component={ProductDetail} />
-    </Stack.Navigator>
-  );
-}
+const MainTabNavigator = () => (
+  <Tab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarStyle: { position: 'absolute', bottom: -48, left: 0, right: 0, backgroundColor: "#0C1B3D", borderColor: "#0C1B3D" },
 
-function CartStack() {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <Stack.Screen name="CartStack" component={CartScreen} />
-    </Stack.Navigator>
-  );
-}
+    }}
+    tabBar={(props) => <Footer {...props} />}
+  >
+    <Tab.Screen name="Dashboard" component={Home} />
+    <Tab.Screen name="Master" component={MainMaster} />
+    <Tab.Screen name="Report" component={Home} />
+    <Tab.Screen name="Chat" component={Home} />
+  </Tab.Navigator>
+);
 
-function UserStack() {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <Stack.Screen name="UserStack" component={UserProfile} />
-    </Stack.Navigator>
-  );
-}
-
-export default function App() {
-  const [cartItems, setCartItems] = React.useState([]);
-
-  React.useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const storedCartItems = await AsyncStorage.getItem('cartItems');
-        if (storedCartItems) {
-          setCartItems(JSON.parse(storedCartItems));
-        }
-      } catch (error) {
-        console.error('Error fetching cart items:', error);
-      }
-    };
-    fetchCartItems();
-  }, []);
-
+const App = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator
+      <Stack.Navigator initialRouteName="SplashScreen"
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: '#e91e63',
-          tabBarInactiveTintColor: 'gray',
-          tabBarStyle: {
-            backgroundColor: 'white',
-          },
-        }}>
-        <Tab.Screen
-          name="Home"
-          component={HomeStack}
-          options={{
-            tabBarLabel: 'Home',
-            tabBarIcon: ({ color, size }) => (
-              <Image
-                style={styles.tinyLogo}
-                source={require('./src/assets/icon/home.png')}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Cart"
-          component={CartStack}
-          options={{
-            tabBarLabel: 'Cart',
-            tabBarIcon: ({ color, size }) => (
-              <Image
-                style={styles.tinyLogo}
-                source={require('./src/assets/icon/grocery-store.png')}
-              />
-            ),
-            tabBarBadge: cartItems.length > 0 ? cartItems.length : null,
-          }}
-        />
-        <Tab.Screen
-          name="User"
-          component={UserStack}
-          options={{
-            tabBarLabel: 'User',
-            tabBarIcon: ({ color, size }) => (
-              <Image
-                style={styles.tinyLogo}
-                source={require('./src/assets/icon/profile-user.png')}
-              />
-            ),
-          }}
-        />
-      </Tab.Navigator>
+        }} >
+        <Stack.Screen name="SplashScreen" component={SplashScreen} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Home" component={MainTabNavigator} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  tinyLogo: {
-    width: 30,
-    height: 30,
-  },
-});
+export default App;

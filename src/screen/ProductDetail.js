@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import Colors from '../assets/Colors';
 import CustomHeader from '../component/CustomHeader';
 import CustomButton from '../component/CustomButton';
@@ -12,7 +12,7 @@ const ProductDetail = ({ route, navigation }) => {
   const addToCart = async () => {
     try {
       const existingCartItems = await AsyncStorage.getItem('cartItems');
-      const parsedExistingCartItems = existingCartItems ? JSON.parse(existingCartItems) : [];
+      const parsedExistingCartItems = JSON.parse(existingCartItems);
       const updatedCartItems = [...parsedExistingCartItems, product];
       
       await AsyncStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
@@ -26,7 +26,7 @@ const ProductDetail = ({ route, navigation }) => {
   };
 
   return (
-    <>
+    <ScrollView>
       <CustomHeader title="Product Detail" />
       <View style={styles.container}>
         <Image
@@ -46,10 +46,10 @@ const ProductDetail = ({ route, navigation }) => {
             title="Buy Now"
             onPress={() => console.log('Buy Now pressed')}
             buttonColor={Colors.green} // Custom button color
-          />
+          /> 
         </View>
       </View>
-    </>
+    </ScrollView>
   );
 };
 
