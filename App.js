@@ -7,7 +7,6 @@ import Home from './src/screen/home/Home'
 import MainMaster from './src/screen/master/MainMaster';
 import SplashScreen from './src/component/SplashScreen';
 import MainLogin from './src/screen/auth/MainLogin';
-import Login from './src/screen/auth/Login';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -36,7 +35,7 @@ const App = () => {
           headerShown: false,
         }} >
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Login" component={MainLogin} />
         <Stack.Screen name="Home" component={MainTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
